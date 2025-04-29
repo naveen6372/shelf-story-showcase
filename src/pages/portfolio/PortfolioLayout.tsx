@@ -1,8 +1,8 @@
-
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { getUserByUsername } from '@/data/mockUsers';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface PortfolioLayoutProps {
   children: React.ReactNode;
@@ -12,16 +12,26 @@ export const PortfolioLayout = ({ children }: PortfolioLayoutProps) => {
   const { username } = useParams<{ username: string }>();
   const [portfolioUser, setPortfolioUser] = useState<any>(null);
   const [theme, setTheme] = useState('minimal');
+  const { user } = useAuth();
   
   useEffect(() => {
     if (username) {
-      const user = getUserByUsername(username);
-      setPortfolioUser(user);
-      if (user?.portfolioTheme) {
-        setTheme(user.portfolioTheme);
+      // If viewing own portfolio, use authenticated user data
+      if (user && user.username === username) {
+        setPortfolioUser(user);
+        if (user.portfolioTheme) {
+          setTheme(user.portfolioTheme);
+        }
+      } else {
+        // Otherwise load from mock data
+        const userData = getUserByUsername(username);
+        setPortfolioUser(userData);
+        if (userData?.portfolioTheme) {
+          setTheme(userData.portfolioTheme);
+        }
       }
     }
-  }, [username]);
+  }, [username, user]);
   
   if (!portfolioUser) {
     return (
@@ -55,7 +65,7 @@ export const PortfolioLayout = ({ children }: PortfolioLayoutProps) => {
       <header className="py-6 px-6 md:px-12 border-b border-opacity-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link to={`/${username}`} className="text-xl font-bold">
-            {portfolioUser.displayName}
+            {portfolioUser.displayName || portfolioUser.username}
           </Link>
           
           <nav className="hidden md:flex items-center space-x-6">
@@ -124,7 +134,7 @@ export const PortfolioLayout = ({ children }: PortfolioLayoutProps) => {
             </div>
             
             <p className="text-sm opacity-70">
-              &copy; {new Date().getFullYear()} {portfolioUser.displayName}. Powered by <Link to="/" className="hover:opacity-100">ProjectShelf</Link>
+              &copy; {new Date().getFullYear()} {portfolioUser.displayName || portfolioUser.username}. Powered by <Link to="/" className="hover:opacity-100">ProjectShelf</Link>
             </p>
           </div>
         </div>

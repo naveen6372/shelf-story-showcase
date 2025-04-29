@@ -2,14 +2,12 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
-interface NavbarProps {
-  isLoggedIn: boolean;
-  username?: string;
-}
-
-export const Navbar = ({ isLoggedIn, username }: NavbarProps) => {
+export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, isAuthenticated } = useAuth();
+  const username = user?.username || '';
 
   return (
     <nav className="bg-background border-b border-border py-4 px-6 md:px-12 flex items-center justify-between">
@@ -27,14 +25,16 @@ export const Navbar = ({ isLoggedIn, username }: NavbarProps) => {
         <Link to="/features" className="text-foreground hover:text-primary transition-colors">
           Features
         </Link>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <>
             <Link to="/dashboard" className="text-foreground hover:text-primary transition-colors">
               Dashboard
             </Link>
-            <Link to={`/${username}`} className="text-foreground hover:text-primary transition-colors">
-              My Portfolio
-            </Link>
+            {username && (
+              <Link to={`/${username}`} className="text-foreground hover:text-primary transition-colors">
+                My Portfolio
+              </Link>
+            )}
             <Button variant="outline" asChild>
               <Link to="/logout">Log out</Link>
             </Button>
@@ -89,7 +89,7 @@ export const Navbar = ({ isLoggedIn, username }: NavbarProps) => {
             >
               Features
             </Link>
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               <>
                 <Link 
                   to="/dashboard" 
@@ -98,13 +98,15 @@ export const Navbar = ({ isLoggedIn, username }: NavbarProps) => {
                 >
                   Dashboard
                 </Link>
-                <Link 
-                  to={`/${username}`} 
-                  className="text-foreground hover:text-primary transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  My Portfolio
-                </Link>
+                {username && (
+                  <Link 
+                    to={`/${username}`} 
+                    className="text-foreground hover:text-primary transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    My Portfolio
+                  </Link>
+                )}
                 <Button variant="outline" asChild>
                   <Link to="/logout" onClick={() => setMobileMenuOpen(false)}>Log out</Link>
                 </Button>

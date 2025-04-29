@@ -41,6 +41,18 @@ export const mockUsers = [
       linkedin: 'alexchenwriter',
       github: null
     }
+  },
+  {
+    id: '4',
+    username: 'aaduupadhyay35',
+    displayName: 'Aadu Upadhyay',
+    bio: 'Creative professional showcasing a portfolio of innovative work and designs.',
+    avatar: 'https://i.pravatar.cc/150?img=7',
+    portfolioTheme: 'minimal',
+    socialLinks: {
+      twitter: 'aaduupadhyay',
+      github: 'aaduupadhyay35'
+    }
   }
 ];
 

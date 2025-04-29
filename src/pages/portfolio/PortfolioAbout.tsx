@@ -1,20 +1,27 @@
-
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getUserByUsername } from '@/data/mockUsers';
+import { useAuth } from '@/contexts/AuthContext';
 import { PortfolioLayout } from './PortfolioLayout';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const PortfolioAbout = () => {
   const { username } = useParams<{ username: string }>();
   const [portfolioUser, setPortfolioUser] = useState<any>(null);
+  const { user } = useAuth();
   
   useEffect(() => {
     if (username) {
-      const user = getUserByUsername(username);
-      setPortfolioUser(user);
+      // If viewing own portfolio, use authenticated user data
+      if (user && user.username === username) {
+        setPortfolioUser(user);
+      } else {
+        // Otherwise load from mock data
+        const userData = getUserByUsername(username);
+        setPortfolioUser(userData);
+      }
     }
-  }, [username]);
+  }, [username, user]);
   
   if (!portfolioUser) {
     return null;  // PortfolioLayout will handle this case
@@ -26,16 +33,16 @@ const PortfolioAbout = () => {
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-12">
             <Avatar className="h-32 w-32">
-              <AvatarImage src={portfolioUser.avatar} alt={portfolioUser.displayName} />
-              <AvatarFallback>{portfolioUser.displayName.charAt(0)}</AvatarFallback>
+              <AvatarImage src={portfolioUser.avatar} alt={portfolioUser.displayName || portfolioUser.username} />
+              <AvatarFallback>{(portfolioUser.displayName || portfolioUser.username).charAt(0)}</AvatarFallback>
             </Avatar>
             
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">
-                About {portfolioUser.displayName}
+                About {portfolioUser.displayName || portfolioUser.username}
               </h1>
               <p className="text-xl">
-                {portfolioUser.bio}
+                {portfolioUser.bio || "Welcome to my portfolio."}
               </p>
             </div>
           </div>
