@@ -1,4 +1,3 @@
-
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -10,7 +9,7 @@ const FeaturesPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar isLoggedIn={isAuthenticated} username={user?.username} />
+      <Navbar />
       
       <main className="flex-1">
         <section className="py-16 px-6 md:py-24 md:px-12 bg-navy text-white">

@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
@@ -13,7 +12,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar isLoggedIn={isAuthenticated} username={user?.username} />
+      <Navbar />
       
       <main className="flex-1">
         {/* Hero Section */}

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -52,7 +51,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar isLoggedIn={false} />
+      <Navbar />
       
       <main className="flex-1 flex items-center justify-center p-6">
         <Card className="w-full max-w-md">

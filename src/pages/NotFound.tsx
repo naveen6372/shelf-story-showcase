@@ -10,7 +10,7 @@ const NotFound = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar isLoggedIn={isAuthenticated} username={user?.username} />
+      <Navbar />
       
       <main className="flex-1 flex items-center justify-center py-12 px-6">
         <div className="max-w-md text-center">

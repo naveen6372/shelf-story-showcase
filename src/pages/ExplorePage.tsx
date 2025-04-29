@@ -32,7 +32,7 @@ const ExplorePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar isLoggedIn={isAuthenticated} username={user?.username} />
+      <Navbar />
       
       <main className="flex-1 py-12 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
