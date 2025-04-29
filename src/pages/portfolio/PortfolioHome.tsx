@@ -10,19 +10,42 @@ const PortfolioHome = () => {
   const { username } = useParams<{ username: string }>();
   const [portfolioUser, setPortfolioUser] = useState<any>(null);
   const [caseStudies, setCaseStudies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     if (username) {
+      console.log("Loading portfolio for username:", username);
       const user = getUserByUsername(username);
       setPortfolioUser(user);
       
-      const studies = getCaseStudiesByUsername(username);
-      setCaseStudies(studies);
+      if (user) {
+        const studies = getCaseStudiesByUsername(username);
+        setCaseStudies(studies);
+        console.log("Found case studies:", studies.length);
+      }
+      setLoading(false);
     }
   }, [username]);
   
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading portfolio...</p>
+      </div>
+    );
+  }
+  
   if (!portfolioUser) {
-    return null;  // PortfolioLayout will handle this case
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">Portfolio Not Found</h1>
+          <p className="text-muted-foreground mb-8">
+            The portfolio you're looking for doesn't exist or has been removed.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

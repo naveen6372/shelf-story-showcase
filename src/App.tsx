@@ -25,6 +25,7 @@ import PortfolioHome from "./pages/portfolio/PortfolioHome";
 import PortfolioAbout from "./pages/portfolio/PortfolioAbout";
 import CaseStudyDetail from "./pages/portfolio/CaseStudyDetail";
 import NotFound from "./pages/NotFound";
+import Index from "./pages/Index";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
           <Routes>
             {/* Public routes */}
             <Route path="/" element={<HomePage />} />
+            <Route path="/index" element={<Index />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/logout" element={<LogoutPage />} />
@@ -58,7 +60,7 @@ const App = () => (
               <Route path="settings" element={<DashboardSettings />} />
             </Route>
             
-            {/* Portfolio routes */}
+            {/* Portfolio routes - These must be defined after dashboard routes */}
             <Route path="/:username" element={<PortfolioHome />} />
             <Route path="/:username/about" element={<PortfolioAbout />} />
             <Route path="/:username/:slug" element={<CaseStudyDetail />} />
