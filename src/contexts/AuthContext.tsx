@@ -5,6 +5,15 @@ interface User {
   id: string;
   username: string;
   email: string;
+  displayName?: string;
+  bio?: string;
+  portfolioTheme?: string;
+  socialLinks?: {
+    website?: string;
+    twitter?: string;
+    linkedin?: string;
+    github?: string;
+  };
 }
 
 interface AuthContextType {
@@ -37,11 +46,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     // In a real app, this would make an API call to authenticate
-    // For now, mock a successful login with hardcoded data
+    const username = email.split('@')[0];
+    
+    // Mock user data with portfolio information
     const mockUser = {
       id: '123',
-      username: email.split('@')[0],
-      email,
+      username: username,
+      email: email,
+      displayName: username.charAt(0).toUpperCase() + username.slice(1),
+      bio: 'Welcome to my portfolio! I am a creative professional showcasing my work.',
+      portfolioTheme: 'minimal',
+      socialLinks: {
+        twitter: username,
+        github: username,
+      }
     };
     
     setUser(mockUser);
@@ -51,11 +69,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (username: string, email: string, password: string) => {
     // In a real app, this would make an API call to register a new user
-    // For now, mock a successful registration
+    // Mock user data with portfolio information
     const mockUser = {
       id: '123',
-      username,
-      email,
+      username: username,
+      email: email,
+      displayName: username.charAt(0).toUpperCase() + username.slice(1),
+      bio: 'Welcome to my portfolio! I am a creative professional showcasing my work.',
+      portfolioTheme: 'minimal',
+      socialLinks: {
+        twitter: username,
+        github: username,
+      }
     };
     
     setUser(mockUser);

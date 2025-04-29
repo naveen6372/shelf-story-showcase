@@ -1,6 +1,6 @@
-
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import { getUserByUsername } from '@/data/mockUsers';
 import { getCaseStudiesByUsername } from '@/data/mockCaseStudies';
 import { PortfolioLayout } from './PortfolioLayout';
@@ -11,21 +11,35 @@ const PortfolioHome = () => {
   const [portfolioUser, setPortfolioUser] = useState<any>(null);
   const [caseStudies, setCaseStudies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
   
   useEffect(() => {
-    if (username) {
-      console.log("Loading portfolio for username:", username);
-      const user = getUserByUsername(username);
-      setPortfolioUser(user);
-      
-      if (user) {
-        const studies = getCaseStudiesByUsername(username);
-        setCaseStudies(studies);
-        console.log("Found case studies:", studies.length);
+    const loadPortfolioData = async () => {
+      if (username) {
+        console.log("Loading portfolio for username:", username);
+        // Use auth user data if viewing own portfolio
+        if (user && user.username === username) {
+          console.log("Using authenticated user data for portfolio");
+          setPortfolioUser(user);
+          const studies = getCaseStudiesByUsername(username);
+          setCaseStudies(studies);
+        } else {
+          // Otherwise load from mock data
+          const portfolioData = getUserByUsername(username);
+          setPortfolioUser(portfolioData);
+          
+          if (portfolioData) {
+            const studies = getCaseStudiesByUsername(username);
+            setCaseStudies(studies);
+            console.log("Found case studies:", studies.length);
+          }
+        }
+        setLoading(false);
       }
-      setLoading(false);
-    }
-  }, [username]);
+    };
+    
+    loadPortfolioData();
+  }, [username, user]);
   
   if (loading) {
     return (
@@ -54,10 +68,10 @@ const PortfolioHome = () => {
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl mb-16">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {portfolioUser.displayName}
+              {portfolioUser.displayName || portfolioUser.username}
             </h1>
             <p className="text-xl">
-              {portfolioUser.bio}
+              {portfolioUser.bio || "Welcome to my portfolio."}
             </p>
           </div>
           
